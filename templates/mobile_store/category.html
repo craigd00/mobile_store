@@ -1,4 +1,4 @@
-{% extends 'rango/base.html' %}
+{% extends 'mobile_store/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -20,7 +20,7 @@
 	</ul>
 	{% if user.is_authenticated %}
 		<div>
-			<form class="form-inline" id="user-form" method="POST" action="{% url 'rango:show_category' category.slug %}">
+			<form class="form-inline" id="user-form" method="POST" action="{% url 'mobile_store:show_category' category.slug %}">
             {% csrf_token %}
 				<div class="form-group">
                 <input class="form-group" size="50" name="query" id="query" type="text" placeholder="{{query}}" />
@@ -53,7 +53,7 @@
 	{% endif %}
 	
 	{% if user.is_authenticated %}
-		<a href="{% url 'rango:add_page' category.slug %}">Add Page</a> <br />
+		<a href="{% url 'mobile_store:add_page' category.slug %}">Add Page</a> <br />
 	{% endif %}
 	{% else %}
 	The specified category does not exist.

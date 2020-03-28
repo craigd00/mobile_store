@@ -1,4 +1,4 @@
-{% extends 'rango/base.html' %}
+{% extends 'mobile_store/base.html' %}
 {% load staticfiles %}
 
 {% block title_block %}
@@ -9,11 +9,11 @@
 
     <div class="jumbotron p-4">
         <div class="container">
-            <h1 class="jumbotron-heading">Search with Rango</h1>
+            <h1 class="jumbotron-heading">Search the internet for phones</h1>
         </div>
     </div>
     <div>
-        <form class="form-inline" id="user-form" method="POST" action="{% url 'rango:search' %}">
+        <form class="form-inline" id="user-form" method="POST" action="{% url 'mobile_store:search' %}">
             {% csrf_token %}
             <div class="form-group">
                 <input class="form-group" size="50" name="query" id="query" type="text" placeholder="{{query}}" />
@@ -37,7 +37,7 @@
                         </p>
                     </div>
                 {% endfor %}
-            </div
+                </div>
         {% endif %}
     </div>
 {% endblock %}

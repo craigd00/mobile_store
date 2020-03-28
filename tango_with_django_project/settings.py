@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rango',
+    'mobile_store',
     'registration',
 ]
 
@@ -51,7 +51,7 @@ REGISTRATION_OPEN = True
 REGISTRATION_AUTO_LOGIN = True
 
 #The URL that Django redirects users to after logging in
-LOGIN_REDIRECT_URL = 'rango:index'
+LOGIN_REDIRECT_URL = 'mobile_store:index'
 
 #the page users are directed to if they are not logged in
 #this was set in a previous chapter. The registration package uses this too
@@ -120,7 +120,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-LOGIN_URL = 'rango:login'
+LOGIN_URL = 'mobile_store:login'
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

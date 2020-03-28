@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('rango', '0002_auto_20200131_1340'),
+        ('mobile_store', '0002_auto_20200131_1340'),
     ]
 
     operations = [

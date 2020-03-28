@@ -1,8 +1,8 @@
 from django.urls import path
-from rango import views
+from mobile_store import views
 
 
-app_name = 'rango'
+app_name = 'mobile_store'
 
 urlpatterns = [
     path('', views.index, name='index'),

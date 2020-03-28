@@ -1,16 +1,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse, Http404
-from rango.models import Category
-from rango.models import Page
-from rango.forms import CategoryForm
-from rango.forms import PageForm
+from mobile_store.models import Category
+from mobile_store.models import Page
+from mobile_store.forms import CategoryForm
+from mobile_store.forms import PageForm
 from django.shortcuts import redirect
 from django.urls import reverse
-from rango.forms import UserForm, UserProfileForm
+from mobile_store.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
-from rango.bing_search import run_query
+from mobile_store.bing_search import run_query
 
 
 def index(request):
@@ -28,13 +28,13 @@ def index(request):
     #context_dict['visits'] = request.session['visits']
     #response = render(request, 'rango/index.html', context=context_dict)
     #return response
-    return render(request, 'rango/index.html', context=context_dict)
+    return render(request, 'mobile_store/index.html', context=context_dict)
 
 def about(request):
     context_dict = {'boldmessage': 'This tutorial has been put together by Craig'}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
-    return render(request, 'rango/about.html', context=context_dict)
+    return render(request, 'mobile_store/about.html', context=context_dict)
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -56,7 +56,7 @@ def show_category(request, category_name_slug):
             context_dict['result_list'] = run_query(query)
             context_dict['query'] = query
 
-    return render(request, 'rango/category.html', context=context_dict)
+    return render(request, 'mobile_store/category.html', context=context_dict)
 
 @login_required
 def add_category(request):
@@ -67,10 +67,10 @@ def add_category(request):
 
         if form.is_valid():
             form.save(commit=True)
-            return redirect('/rango/')
+            return redirect('/mobile_store/')
         else:
             print(form.errors)
-    return render(request, 'rango/add_category.html', {'form': form})
+    return render(request, 'mobile_store/add_category.html', {'form': form})
 
 @login_required
 def add_page(request, category_name_slug):
@@ -80,7 +80,7 @@ def add_page(request, category_name_slug):
         category = None
 
     if category is None:
-        return redirect('/rango/')
+        return redirect('/mobile_store/')
 
     form = PageForm()
 
@@ -94,13 +94,13 @@ def add_page(request, category_name_slug):
                 page.views = 0
                 page.save()
 
-                return redirect(reverse('rango:show_category',
+                return redirect(reverse('mobile_store:show_category',
                                         kwargs={'category_name_slug':category_name_slug}))
         else:
             print(form.errors)
 
     context_dict = {'form': form, 'category': category}
-    return render(request, 'rango/add_page.html', context=context_dict)
+    return render(request, 'mobile_store/add_page.html', context=context_dict)
         
 #def register(request):
    # registered = False
@@ -156,7 +156,7 @@ def add_page(request, category_name_slug):
 
 @login_required
 def restricted(request):
-    return render(request, 'rango/restricted.html')
+    return render(request, 'mobile_store/restricted.html')
     #return HttpResponse("Since you're logged in, you can see this text!")
 
 #@login_required
