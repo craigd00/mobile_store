@@ -7,39 +7,33 @@ django.setup()
 from mobile_store.models import Category, Page
 
 def populate():
-    python_pages = [
-        {'title': 'Official Python Tutorial',
-         'url':'http://docs.python.org/3/tutorial/',
+    android_pages = [
+        {'title': 'Samsung Website',
+         'url':'https://www.samsung.com/uk/',
          'views': 20},
-        {'title':'How to Think like a Computer Scientist',
-         'url':'http://www.greenteapress.com/thinkpython/',
+        {'title':'Huawei Website',
+         'url':'https://www.huawei.com/uk/',
          'views': 38},
-        {'title':'Learn Python in 10 Minutes',
-         'url':'http://www.korokithakis.net/tutorials/python/',
+        {'title':'Nokia Website',
+         'url':'https://www.nokia.com/',
          'views': 64}]
 
-    django_pages = [
-        {'title':'Official Django Tutorial',
-         'url':'https://docs.djangoproject.com/en/2.1/intro/tutorial01/',
+    apple_pages = [
+        {'title':'iPhone XR',
+         'url':'https://www.apple.com/uk/iphone-xr/specs/',
          'views': 12},
-        {'title':'Django Rocks',
-         'url':'http://www.djangorocks.com/',
+        {'title':'iPhone 11 Pro',
+         'url':'https://www.apple.com/uk/iphone-11-pro/',
          'views': 2},
-        {'title':'How to Tango with Django',
-         'url':'http://www.tangowithdjango.com/',
+        {'title':'Airpods',
+         'url':'https://www.apple.com/uk/airpods/',
          'views': 89}]
 
-    other_pages = [
-        {'title':'Bottle',
-         'url':'http://bottlepy.org/docs/dev/',
-         'views': 45},
-        {'title':'Flask',
-         'url':'http://flask.pocoo.org',
-         'views': 32}]
+    
 
-    cats = {'Python': {'pages': python_pages, 'views':128, 'likes':64},
-            'Django': {'pages': django_pages, 'views':64, 'likes':32},
-            'Other Frameworks': {'pages': other_pages, 'views':32, 'likes':16} }
+    cats = {'Android': {'pages': android_pages, 'views':128, 'likes':64},
+            'Apple': {'pages': apple_pages, 'views':64, 'likes':32},
+        }
 
     for cat, cat_data in cats.items():
         c = add_cat(cat,cat_data['views'], cat_data['likes'])
