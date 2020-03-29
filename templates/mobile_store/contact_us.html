@@ -1,0 +1,23 @@
+{% extends 'mobile_store/base.html' %}
+
+{% block title_block %} 
+    Contact Us
+{% endblock %}
+
+{% block body_block %} 
+<div class="jumbotron p-4">
+	<div class="container">
+        <h1 class ="jumbotron-heading">Contact Us</h1>
+        <h5 class="jumbotron-heading"> Let us know what you thought of us! We are always looking for ways to improve</h5>
+    </div>
+</div>
+
+<form action="",  method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Submit your feedback</button>
+</form>
+
+{% endblock %}
+
+

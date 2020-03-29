@@ -40,3 +40,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+#class Contact(models.Model):
+   # NAME_MAX_LENGTH = 128
+   # FEEDBACK_MAX_LENGTH = 200
+
+    #firstname = models.CharField(max_length=NAME_MAX_LENGTH)
+    #surname = models.CharField(max_length=NAME_MAX_LENGTH)
+    #email = models.EmailField()
+    #content = models.CharField(max_length=FEEDBACK_MAX_LENGTH)
+
+    #def __str__(self):
+      #  return self.firstname

@@ -2,6 +2,20 @@ from django import forms
 from mobile_store.models import Page, Category
 from django.contrib.auth.models import User
 from mobile_store.models import UserProfile
+#from mobile_store.models import Contact
+
+
+class ContactForm(forms.Form):
+   
+
+    firstname= forms.CharField(max_length=200, label="First Name")
+    surname= forms.CharField(max_length=200, label="Surname")
+    email= forms.EmailField(max_length=500, label="Email")
+    feedback= forms.CharField(label='',widget=forms.Textarea(
+                        attrs={'placeholder': 'Enter your feedback here'}))
+    
+
+
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=Category.NAME_MAX_LENGTH,
@@ -34,6 +48,9 @@ class PageForm(forms.ModelForm):
             cleaned_data['url'] = url
 
         return cleaned_data
+
+
+
 
 class UserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())

@@ -37,11 +37,21 @@
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:index' %}">Home</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'mobile_store:about' %}">About</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:android' %}">Android</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:apple' %}">Apple</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:contact_us' %}">Contact Us</a></li>
                         {% if user.is_authenticated %}
                         <li class="nav-item "><a class="nav-link" href="{% url 'mobile_store:restricted' %}">Restricted</a></li>
                         <li class="nav-item"><a class="nav-link" href=" {% url 'auth_logout' %}?next={% url 'mobile_store:index' %}">Logout</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:add_category' %}">Add Category</a></li>
+
                         <li class="nav-item"><a class="nav-link" href="/accounts/password/change/">Change Password</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:reviews' %}">Reviews</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mobile_store:basket' %}">
+                            <button type="button" class="btn btn-primary">
+                                Basket <span class="badge badge-light">3</span>
+                                <span class="sr-only">Items in basket</span>
+                            </button>
+                        </a></li>
                         {% else %}
                         <li class="nav-item"><a class="nav-link" href="{% url 'registration_register' %}">Register Here</a></li>
                         <li class="nav-item "><a class="nav-link" href="{% url 'auth_login' %}">Login</a></li>

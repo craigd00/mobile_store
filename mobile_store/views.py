@@ -4,6 +4,7 @@ from mobile_store.models import Category
 from mobile_store.models import Page
 from mobile_store.forms import CategoryForm
 from mobile_store.forms import PageForm
+from mobile_store.forms import ContactForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from mobile_store.forms import UserForm, UserProfileForm
@@ -11,7 +12,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from mobile_store.bing_search import run_query
-
+from django.core.mail import EmailMessage
+from django.shortcuts import redirect
+from django.template.loader import get_template
+from django.core.mail import send_mail
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -35,6 +39,58 @@ def about(request):
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
     return render(request, 'mobile_store/about.html', context=context_dict)
+
+def basket(request):
+    return render(request, 'mobile_store/basket.html')
+
+def reviews(request):
+    return render(request, 'mobile_store/reviews.html')
+
+def contact_us(request):
+    form = ContactForm        
+    context_dict = {}
+
+
+    form= ContactForm(request.POST or None)
+    if form.is_valid():
+        
+        firstname = request.POST.get('firstname')
+        surname = request.POST.get('surname')
+        email = request.POST.get('email')
+        feedback = request.POST.get('feedback')
+
+       
+
+        subject = "comment"
+        comment= firstname + " with the email, " + email + ", sent the following message:\n\n" + feedback + ". We will get back to your message in due course.\n\n" + "Best wishes from the Mobile Store Team";
+        send_mail(subject, comment, 'mobilestoregu@gmail.com', [email])
+
+
+        context_dict['firstname'] = firstname
+        context_dict['surname'] = surname
+        context_dict['email'] = email
+        context_dict['feedback'] = feedback
+        
+        return render(request, 'mobile_store/contacting_us.html', context=context_dict)
+
+    else:
+        context =  {'form': form}
+        return render(request, 'mobile_store/contact_us.html', context) 
+            
+    
+
+
+
+def apple(request):
+    return render(request, 'mobile_store/apple.html')
+
+def android(request):
+    return render(request, 'mobile_store/android.html')
+
+def contacting_us(request):
+    firstname = request.POST.get('firstname')
+    context= {'firstname':firstname}
+    return render(request, 'mobile_store/contacting_us.html', context)
 
 def show_category(request, category_name_slug):
     context_dict = {}
