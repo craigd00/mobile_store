@@ -5,6 +5,7 @@ from mobile_store import views
 app_name = 'mobile_store'
 
 urlpatterns = [
+    #path('', views.index, name='index'),
     path('', views.index, name='index'),
     path('about/', views.about, name='about'),
     path('basket/', views.basket, name='basket'),
@@ -21,6 +22,8 @@ urlpatterns = [
     path('contact_us/', views.contact_us, name='contact_us'),
     path('contacting_us/', views.contacting_us, name='contacting_us'),
     path('reviews/', views.reviews, name='reviews'),
+    path('checkout_page/', views.checkout_page, name='checkout_page'),
+    path('product/', views.product, name='product'),
     #path('logout/', views.user_logout, name='logout'),
     #path('search/', views.search, name='search'),
 ]

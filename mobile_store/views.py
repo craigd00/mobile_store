@@ -16,24 +16,34 @@ from django.core.mail import EmailMessage
 from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.core.mail import send_mail
+from mobile_store.models import Item
+from mobile_store.models import Order
+from mobile_store.models import OrderItem
 
 
 def index(request):
-    category_list = Category.objects.order_by('-likes')[:5]
-    pages_list = Page.objects.order_by('-views')[:5]
+    context_dict = {
+        'items': Item.objects.all()
+    }
+    return render(request, 'mobile_store/index.html')
+    #return render(request, 'mobile_store/home_page.html')#, context=context_dict)
+    #category_list = Category.objects.order_by('-likes')[:5]
+    #pages_list = Page.objects.order_by('-views')[:5]
     
-    context_dict = {}
-    context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
-    context_dict['categories'] = category_list
-    context_dict['pages'] = pages_list
+    #context_dict = {}
+    #context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
+    #context_dict['categories'] = category_list
+    #context_dict['pages'] = pages_list
    
     #context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
     
-    visitor_cookie_handler(request)
+    #visitor_cookie_handler(request)
     #context_dict['visits'] = request.session['visits']
     #response = render(request, 'rango/index.html', context=context_dict)
     #return response
-    return render(request, 'mobile_store/index.html', context=context_dict)
+    
+
+    
 
 def about(request):
     context_dict = {'boldmessage': 'This tutorial has been put together by Craig'}
@@ -95,6 +105,12 @@ def contacting_us(request):
     firstname = request.POST.get('firstname')
     context= {'firstname':firstname}
     return render(request, 'mobile_store/contacting_us.html', context)
+
+def product(request):
+    return render(request, 'mobile_store/product.html')
+
+def checkout_page(request):
+    return render(request, 'mobile_store/checkout_page.html')
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -256,5 +272,10 @@ def visitor_cookie_handler(request):
      #       result_list = run_query(query)
 
    # return render(request, 'rango/search.html', {'result_list': result_list})
-    
+
+def item_list(request):
+    context_dict = {
+        'items': Item.objects.all()
+    }
+    return render(request, 'home-page.html', context=context_dict)
     

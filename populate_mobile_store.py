@@ -20,6 +20,7 @@ def populate():
 
     apple_pages = [
         {'title':'iPhone XR',
+        'image1': '{% static "images/iphone}'
          'url':'https://www.apple.com/uk/iphone-11-pro/',
          'views': 12},
         {'title':'iPhone 11 Pro',

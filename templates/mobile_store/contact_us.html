@@ -12,12 +12,13 @@
         <h5 class="jumbotron-heading"> Let us know what you thought of us! We are always looking for ways to improve</h5>
     </div>
 </div>
-
-<form action="",  method="POST">
-    {% csrf_token %}
-    {{ form|crispy }}
-    <button class="btn btn-primary" type="submit">Submit your feedback</button>
-</form>
+<div class="container"> 
+    <form action="",  method="POST">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <button class="btn btn-primary" type="submit">Submit your feedback</button>
+    </form>
+</div>
 
 {% endblock %}
 

@@ -1,11 +1,11 @@
 from django import forms
-from mobile_store.models import Page, Category
+from mobile_store.models import Category, Page
 from django.contrib.auth.models import User
 from mobile_store.models import UserProfile
 from mobile_store.models import Contact
-from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Submit
-
+#from crispy_forms.helper import FormHelper
+#from crispy_forms.layout import Submit
+#from mobile_store.models import Phone
 
 class ContactForm(forms.ModelForm):
     firstname= forms.CharField(max_length=Contact.NAME_MAX_LENGTH, label="First Name")
@@ -23,13 +23,23 @@ class ContactForm(forms.ModelForm):
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=Category.NAME_MAX_LENGTH,
                            help_text="Please enter the category name.")
-    views = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
-    likes = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
 
     class Meta:
         model = Category
         fields = ('name',)
+
+#class PhoneForm(forms.ModelForm):
+    #picture1 = forms.ImageField(upload_to='static/images', blank=True)
+   # picture2 = forms.ImageField(upload_to='static/images', blank=True)
+   # picture3 = forms.ImageField(upload_to='static/images', blank=True)
+    #phone_name = forms.CharField(max_length=Phone.PHONE_MAX_LENGTH)
+   # description = forms.CharField(max_length=Phone.DESC_MAX_LENGTH)
+    #price = forms.IntegerField(default=0)
+
+   # class Meta:
+      #  model = Phone
+        #exclude = ('category',)
 
 class PageForm(forms.ModelForm):
     title = forms.CharField(max_length=Page.TITLE_MAX_LENGTH,
