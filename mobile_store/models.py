@@ -50,4 +50,6 @@ class Contact(models.Model):
     email = models.EmailField(blank=True)
     feedback = models.CharField(max_length=FEEDBACK_MAX_LENGTH, blank=True)
 
+
+
     
