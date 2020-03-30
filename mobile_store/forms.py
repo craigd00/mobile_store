@@ -2,17 +2,20 @@ from django import forms
 from mobile_store.models import Page, Category
 from django.contrib.auth.models import User
 from mobile_store.models import UserProfile
-#from mobile_store.models import Contact
+from mobile_store.models import Contact
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Submit
 
 
-class ContactForm(forms.Form):
-   
-
-    firstname= forms.CharField(max_length=200, label="First Name")
-    surname= forms.CharField(max_length=200, label="Surname")
+class ContactForm(forms.ModelForm):
+    firstname= forms.CharField(max_length=Contact.NAME_MAX_LENGTH, label="First Name")
+    surname= forms.CharField(max_length=Contact.NAME_MAX_LENGTH, label="Surname")
     email= forms.EmailField(max_length=500, label="Email")
-    feedback= forms.CharField(label='',widget=forms.Textarea(
-                        attrs={'placeholder': 'Enter your feedback here'}))
+    feedback= forms.CharField(label='', max_length=Contact.FEEDBACK_MAX_LENGTH, widget=forms.Textarea(attrs={'placeholder': 'Enter your feedback here'}))
+
+    class Meta:
+        model = Contact
+        fields = ('firstname', 'surname', 'email', 'feedback',)
     
 
 

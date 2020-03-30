@@ -17,6 +17,7 @@ urlpatterns = [
     path('restricted/', views.restricted, name='restricted'),
     path('apple/', views.apple, name='apple'),
     path('android/', views.android, name='android'),
+    path('iphoneXR/', views.iphoneXR, name='iphoneXR'),
     path('contact_us/', views.contact_us, name='contact_us'),
     path('contacting_us/', views.contacting_us, name='contacting_us'),
     path('reviews/', views.reviews, name='reviews'),

@@ -17,6 +17,7 @@ from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.core.mail import send_mail
 
+
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
     pages_list = Page.objects.order_by('-views')[:5]
@@ -45,6 +46,9 @@ def basket(request):
 
 def reviews(request):
     return render(request, 'mobile_store/reviews.html')
+
+def iphoneXR(request):
+    return render(request, 'mobile_store/iphoneXR.html')
 
 def contact_us(request):
     form = ContactForm        
