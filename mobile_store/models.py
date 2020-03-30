@@ -50,6 +50,18 @@ class Contact(models.Model):
     email = models.EmailField(blank=True)
     feedback = models.CharField(max_length=FEEDBACK_MAX_LENGTH, blank=True)
 
+class Phone(models.Model):
+    PHONE_MAX_LENGTH = 200
+    DESC_MAX_LENGTH = 400
+
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    picture = models.ImageField(upload_to='static/images', blank=True)
+    phone_name = models.CharField(max_length=PHONE_MAX_LENGTH)
+    description = models.CharField(max_length=DESC_MAX_LENGTH, blank=True)
+    price = models.IntegerField(default=0)
+
+
+
 
 
     
