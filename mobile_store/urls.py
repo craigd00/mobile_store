@@ -23,9 +23,11 @@ urlpatterns = [
     path('contacting_us/', views.contacting_us, name='contacting_us'),
     path('reviews/', views.reviews, name='reviews'),
     path('checkout_page/', views.checkout_page, name='checkout_page'),
+    path('order_summary/', views.OrderSummaryView.as_view(), name='order_summary'),
     path('product/<slug>/', views.ItemDetailView.as_view(), name='product'),
     path('add_to_basket/<slug>/', views.add_to_basket, name='add_to_basket'),
-     path('remove_from_basket/<slug>/', views.remove_from_basket, name='remove_from_basket'),    
+    path('remove_from_basket/<slug>/', views.remove_from_basket, name='remove_from_basket'),    
+    path('remove_single_item_from_basket/<slug>/', views.remove_single_item_from_basket, name='remove_single_item_from_basket'),
     #path('logout/', views.user_logout, name='logout'),
     #path('search/', views.search, name='search'),
 ]

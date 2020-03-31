@@ -1,9 +1,12 @@
 from django import template
-from mobile_store.models import Category
+from mobile_store.models import Order
 
 register = template.Library()
 
-@register.inclusion_tag('mobile_store/categories.html')
-def get_category_list(current_category=None):
-    return {'categories': Category.objects.all(),
-            'current_category': current_category}
+@register.filter
+def basket_count(user):
+    if user.is_authenticated:
+        qs = Order.objects.filter(user=user, ordered=False)
+        if qs.exists():
+            return qs[0].items.count()
+    return 0
