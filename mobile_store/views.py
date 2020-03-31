@@ -1,12 +1,10 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, Http404
 from mobile_store.models import Category
 from mobile_store.models import Page
 from mobile_store.forms import CategoryForm
 from mobile_store.forms import PageForm
 from mobile_store.forms import ContactForm
-from django.shortcuts import redirect
-from django.urls import reverse
 from mobile_store.forms import UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -19,28 +17,79 @@ from django.core.mail import send_mail
 from mobile_store.models import Item
 from mobile_store.models import Order
 from mobile_store.models import OrderItem
+from django.views.generic import ListView, DetailView
+from django.utils import timezone
+from django.contrib import messages
+class HomeView(ListView):
+    model = Item
+    template_name = 'mobile_store/index.html'
 
-
-def index(request):
+def product(request):
     context_dict = {
         'items': Item.objects.all()
     }
-    return render(request, 'mobile_store/index.html')
-    #return render(request, 'mobile_store/home_page.html')#, context=context_dict)
-    #category_list = Category.objects.order_by('-likes')[:5]
-    #pages_list = Page.objects.order_by('-views')[:5]
-    
-    #context_dict = {}
-    #context_dict['boldmessage'] = 'Crunchy, creamy, cookie, candy, cupcake!'
-    #context_dict['categories'] = category_list
-    #context_dict['pages'] = pages_list
+    return render(request, 'mobile_store/product.html', context=context_dict)
+
+class ItemDetailView(DetailView):
+    model = Item
+    template_name = 'mobile_store/product.html'
+
+def add_to_basket(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    order_item,created = OrderItem.objects.get_or_create(item=item
+    , user=request.user, ordered=False)
+    order_qs = Order.objects.filter(user=request.user, ordered=False)
+    if order_qs.exists():
+        order = order_qs[0]
+        #check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item.quantity+=1
+            order_item.save()
+            messages.info(request, "Quantity of this item has been added")
+            return redirect('mobile_store:product', slug=slug)
+        else:
+            order.items.add(order_item)
+            messages.info(request, "This item was added to basket")
+            
+            return redirect('mobile_store:product', slug=slug)
+    else:
+        ordered_date = timezone.now()
+        order = Order.objects.create(user=request.user, ordered_date=ordered_date)
+        order.items.add(order_item)
+        messages.info(request, "This item was added to basket")
+
+
+def remove_from_basket(request, slug):
+    item = get_object_or_404(Item, slug=slug)
+    order_qs = Order.objects.filter(
+        user=request.user, ordered=False
+    )
+    if order_qs.exists():
+        order = order_qs[0]
+        #check if the order item is in the order
+        if order.items.filter(item__slug=item.slug).exists():
+            order_item = OrderItem.objects.filter(
+                item=item,
+                user=request.user,
+                ordered=False
+            )[0]
+            order.items.remove(order_item)
+            messages.info(request, "This item was removed from basket")
+            return redirect('mobile_store:product', slug=slug)
+        else:
+        
+            messages.info(request, "This item was not in basket")
+            return redirect('mobile_store:product', slug=slug)
+    else:
    
-    #context_dict = {'boldmessage': 'Crunchy, creamy, cookie, candy, cupcake!'}
+        messages.info(request, "No current order")
+        return redirect('mobile_store:product', slug=slug)
+
     
-    #visitor_cookie_handler(request)
-    #context_dict['visits'] = request.session['visits']
-    #response = render(request, 'rango/index.html', context=context_dict)
-    #return response
+
+
+def checkout_page(request):
+    return render(request, 'mobile_store/checkout_page.html')
     
 
     
@@ -106,11 +155,8 @@ def contacting_us(request):
     context= {'firstname':firstname}
     return render(request, 'mobile_store/contacting_us.html', context)
 
-def product(request):
-    return render(request, 'mobile_store/product.html')
 
-def checkout_page(request):
-    return render(request, 'mobile_store/checkout_page.html')
+
 
 def show_category(request, category_name_slug):
     context_dict = {}
@@ -273,9 +319,5 @@ def visitor_cookie_handler(request):
 
    # return render(request, 'rango/search.html', {'result_list': result_list})
 
-def item_list(request):
-    context_dict = {
-        'items': Item.objects.all()
-    }
-    return render(request, 'home-page.html', context=context_dict)
+
     

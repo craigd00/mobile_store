@@ -5,6 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 import django
 django.setup()
 from mobile_store.models import Category, Page
+from mobile_store.models import Item
 
 def populate():
     android_pages = [
@@ -20,7 +21,6 @@ def populate():
 
     apple_pages = [
         {'title':'iPhone XR',
-        'image1': '{% static "images/iphone}'
          'url':'https://www.apple.com/uk/iphone-11-pro/',
          'views': 12},
         {'title':'iPhone 11 Pro',
@@ -30,7 +30,7 @@ def populate():
          'url':'https://www.apple.com/uk/airpods/',
          'views': 89}]
 
-    
+
 
     cats = {'Android': {'pages': android_pages, 'views':128, 'likes':64},
             'Apple': {'pages': apple_pages, 'views':64, 'likes':32},
@@ -45,6 +45,8 @@ def populate():
         for p in Page.objects.filter(category=c):
             print(f'- {c}: {p}')
 
+ 
+
 def add_page(cat, title, url, views=0):
     p = Page.objects.get_or_create(category=cat, title=title)[0]
     p.url=url
@@ -58,6 +60,7 @@ def add_cat(name, views=0, likes=0):
     c.likes=likes
     c.save()
     return c
+
 
 if __name__ == '__main__':
     print('Starting Mobile Store population script...')
