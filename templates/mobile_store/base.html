@@ -81,7 +81,7 @@
             <a class="nav-link waves-effect" href="{% url 'mobile_store:reviews' %}" target="_blank">Reviews</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link waves-effect" href="{% url 'auth_logout' %}?next={% url 'mobile_store:index' %}"
+            <a class="nav-link waves-effect" onclick="LoggedOut()" href="{% url 'auth_logout' %}?next={% url 'mobile_store:index' %}"
               target="_blank">Logout</a>
           </li>
           {% else %}
@@ -163,6 +163,12 @@
     new WOW().init();
 
   </script>
+  <script>
+    function LoggedOut(){
+            alert("You have been logged out");
+            
+    }
+    </script>
 </body>
 
 </html>
