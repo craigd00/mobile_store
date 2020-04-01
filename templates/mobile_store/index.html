@@ -239,7 +239,7 @@
               <!--Card image-->
               <div class="view overlay">
                 <img src="{{ item.get_static_url }}" class="card-img-top"
-                  alt="Picture of the current phone" height =350 width=150>
+                  alt="Picture of the current phone" height=250 width=auto>
                 <a href="{{ item.get_absolute_url }}">
                   <div class="mask rgba-white-slight"></div>
                 </a>
@@ -260,7 +260,7 @@
                   </strong>
                 </h5>
 
-                <h4 class="font-weight-bold blue-text">
+                <h4 class="font-weight-bold green-text">
                   <strong>£
                   {% if item.discount_price %}
                     {{ item.discount_price }}
