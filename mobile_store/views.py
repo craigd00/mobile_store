@@ -22,12 +22,24 @@ from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
+from django.urls import reverse
 
 
 class HomeView(ListView):
     model = Item
     paginate_by = 8
     template_name = 'mobile_store/index.html'
+
+    def post(self, request):
+        context_dict = {}
+
+        if request.method == 'POST':
+            query = request.POST['query'].strip()
+            if query:
+                context_dict['result_list'] = list(Page.objects.filter(title=query))
+
+        return render(request, 'mobile_store/index.html', context=context_dict)
+
 
 
 class OrderSummaryView(LoginRequiredMixin, View):
@@ -149,8 +161,6 @@ def remove_single_item_from_basket(request, slug):
 
 def checkout_page(request):
     return render(request, 'mobile_store/checkout_page.html')
-    
-
     
 
 def about(request):
