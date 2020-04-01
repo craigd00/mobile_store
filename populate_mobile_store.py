@@ -8,6 +8,26 @@ from mobile_store.models import Category, Page
 from mobile_store.models import Item
 
 def populate():
+    
+    add_item(title='Samsung Galaxy',
+        price=150,
+        discount_price=0,
+        category='Android',
+        label='primary',
+        slug='samsungG',
+        description='This phone comes with the latest technology',
+        image='phone.jpg')
+
+    add_item(title='iPhone 11',
+        price=800,
+        discount_price=0,
+        category='Apple',
+        label='primary',
+        slug='iphone11',
+        description='This phone comes with the latest technology',
+        image='iphoneXRflat.jpg')
+
+
     android_pages = [
         {'title': 'Samsung Website',
          'url':'https://www.samsung.com/uk/',
@@ -36,6 +56,7 @@ def populate():
             'Apple': {'pages': apple_pages, 'views':64, 'likes':32},
         }
 
+
     for cat, cat_data in cats.items():
         c = add_cat(cat,cat_data['views'], cat_data['likes'])
         for p in cat_data['pages']:
@@ -45,7 +66,12 @@ def populate():
         for p in Page.objects.filter(category=c):
             print(f'- {c}: {p}')
 
- 
+    
+def add_item(title, price, discount_price, category, label, slug, description, image):
+    i = Item.objects.get_or_create(title=title, 
+    price=price, discount_price=discount_price, category=category, 
+    label=label, slug=slug, description=description, image=image)[0]
+    return i
 
 def add_page(cat, title, url, views=0):
     p = Page.objects.get_or_create(category=cat, title=title)[0]
