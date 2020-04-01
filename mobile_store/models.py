@@ -16,14 +16,7 @@ LABEL_CHOICES = (
     ('D', 'danger')
 )
     
-class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    website = models.URLField(blank=True)
-    picture = models.ImageField(upload_to='profile_images', blank=True)
-
-    def __str__(self):
-        return self.user.username
-
+#model for the contact 
 class Contact(models.Model):
     NAME_MAX_LENGTH = 128
     FEEDBACK_MAX_LENGTH = 200
@@ -33,52 +26,8 @@ class Contact(models.Model):
     email = models.EmailField(blank=True)
     feedback = models.CharField(max_length=FEEDBACK_MAX_LENGTH, blank=True)
 
-class Category(models.Model):
-    NAME_MAX_LENGTH = 128
-    
-    name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True)
-    views = models.IntegerField(default=0)
-    likes = models.IntegerField(default=0)
-    slug = models.SlugField(unique=True)
 
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.name)
-        super(Category, self).save(*args, **kwargs)
-    
-    class Meta:
-        verbose_name_plural = 'Categories'
-
-    def __str__(self):
-        return self.name
-
-class Page(models.Model):
-    TITLE_MAX_LENGTH = 128
-    URL_MAX_LENGTH = 200
-    
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    title = models.CharField(max_length=TITLE_MAX_LENGTH)
-    url = models.URLField()
-    views = models.IntegerField(default=0)
-
-    def __str__(self):
-        return self.title
-
-#class Phone(models.Model):
-    #PHONE_MAX_LENGTH = 200
-    #DESC_MAX_LENGTH = 400
-
-    #category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    #picture1 = models.ImageField(upload_to='static/images', blank=True)
-    #picture2 = models.ImageField(upload_to='static/images', blank=True)
-    #picture3 = models.ImageField(upload_to='static/images', blank=True)
-    #phone_name = models.CharField(max_length=PHONE_MAX_LENGTH)
-    #description = models.CharField(max_length=DESC_MAX_LENGTH, blank=True)
-    #price = models.IntegerField(default=0)
-
-    #def __str__(self):
-        #return self.phone_name
-
-
+#model for items 
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
@@ -88,30 +37,34 @@ class Item(models.Model):
     slug = models.SlugField(default="product")
     description = models.TextField(default="Description unavailable for this product")
     image = models.CharField(default="sale.jpg", max_length=400)   
-   
+    
+    #gets the static url of the image to use in templates
     def get_static_url(self):
        return settings.STATIC_URL + 'images/' + self.image
 
     def __str__(self):
         return self.title
 
+    #gets absolute url of item
     def get_absolute_url(self):
         return reverse('mobile_store:product', kwargs={
             'slug':self.slug
         })
 
+    #adds item to basket using add to basket view
     def get_add_to_basket_url(self):
         return reverse('mobile_store:add_to_basket', kwargs={
             'slug':self.slug
         })
     
+    #removes item from basket using remove from basket view
     def get_remove_from_basket_url(self):
         return reverse('mobile_store:remove_from_basket', kwargs={
             'slug':self.slug
         })
 
 
-
+#model used when someone has item in basket
 class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     ordered = models.BooleanField(default=False)
@@ -120,17 +73,22 @@ class OrderItem(models.Model):
     def __str__(self):
         return f"{self.quantity} of {self.item.title}"
 
+    #gets price of item multiplied by quantity
     def get_total_item_price(self):
         return self.quantity * self.item.price
 
+    #gets discount price of item if it has one
     def get_total_discount_item_price(self):
         return self.quantity * self.item.discount_price
 
+    #if item has a discount price it uses that, otherwise it returns the normal price
     def get_final_price(self):
         if self.item.discount_price:
             return self.get_total_discount_item_price()
         return self.get_total_item_price()
 
+
+#model for an order from a user, can add many items to order
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     ordered = models.BooleanField(default=False)
@@ -141,6 +99,7 @@ class Order(models.Model):
     def __str__(self):
         return self.user.username
 
+    #gets order price
     def get_total(self):
         total = 0
         for order_item in self.items.all():

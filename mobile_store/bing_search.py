@@ -1,7 +1,7 @@
 import json
 import requests
 
-
+#code for bing key read, did not end up using it for implementation
 def read_bing_key():
 
     bing_api_key = None

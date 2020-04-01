@@ -1,15 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
-from mobile_store.models import Category, Page, Item, Order, OrderItem
-from mobile_store.forms import CategoryForm, PageForm, ContactForm, UserForm, UserProfileForm
+from mobile_store.models import Item, Order, OrderItem
+from mobile_store.forms import ContactForm, UserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 from mobile_store.bing_search import run_query
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage   
 from django.template.loader import get_template
-from django.core.mail import send_mail
+from django.core.mail import send_mail  #used to email customer
 from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.contrib import messages
@@ -19,7 +19,7 @@ from django.urls import reverse
 
 class HomeView(ListView):
     model = Item
-    paginate_by = 8
+    paginate_by = 8 #used to show how many phones to show on home page
     template_name = 'mobile_store/index.html'
 
     def post(self, request):
@@ -37,33 +37,31 @@ class AppleView(ListView):
     model = Item
     template_name = 'mobile_store/apple.html'
     paginate_by = 4
-        
+
+    #only shows the phones with the category apple    
     def get(self, request):
         context_dict = {}
         cat = "Apple"
-        context_dict['item_list'] = list(Item.objects.filter(category=cat))
+        context_dict['item_list'] = Item.objects.filter(category=cat)
+        
 
         return render(request, 'mobile_store/apple.html', context=context_dict)
+
 
 class AndroidView(ListView):
     model = Item
     paginate_by = 4
     template_name = 'mobile_store/android.html'
 
+    #only shows the phones with the category android  
     def get(self, request):
         context_dict = {}
         cat = "Android"
-        context_dict['item_list'] = list(Item.objects.filter(category=cat))
+        context_dict['item_list'] = Item.objects.filter(category=cat)
 
-        return render(request, 'mobile_store/android.html', context=context_dict)
+        return render(request, 'mobile_store/android.html',context=context_dict)
 
-
-
-
-    
-    
-
-
+#shows the order summary, if user does not have an order, will send a message
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):
         try:
@@ -78,16 +76,18 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect('/')
 
 
-def product(request):
-    context_dict = {
-        'items': Item.objects.all()
-    }
-    return render(request, 'mobile_store/product.html', context=context_dict)
+#def product(request):
+   # context_dict = {
+      #  'items': Item.objects.all()
+   # }
+   # return render(request, 'mobile_store/product.html', context=context_dict)
 
+#used for showing products
 class ItemDetailView(DetailView):
     model = Item
     template_name = 'mobile_store/product.html'
 
+#adds a phone to the basket
 @login_required
 def add_to_basket(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -115,6 +115,7 @@ def add_to_basket(request, slug):
         return redirect('mobile_store:order_summary')
 
 
+#removes whole item from basket,even if quantity > 1, gives user alerts
 @login_required
 def remove_from_basket(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -143,6 +144,7 @@ def remove_from_basket(request, slug):
         messages.info(request, "No current order")
         return redirect('mobile_store:product', slug=slug)
 
+#removes one items quantity from the basket
 @login_required
 def remove_single_item_from_basket(request, slug):
     item = get_object_or_404(Item, slug=slug)
@@ -176,29 +178,22 @@ def remove_single_item_from_basket(request, slug):
         messages.info(request, "No current order")
         return redirect('mobile_store:product', slug=slug)
 
-    
 
-
+#takes to checkout page
 def checkout_page(request):
     return render(request, 'mobile_store/checkout_page.html')
     
 
 def about(request):
-    context_dict = {}
-    visitor_cookie_handler(request)
-    context_dict['visits'] = request.session['visits']
+    return render(request, 'mobile_store/about.html')
 
-    return render(request, 'mobile_store/about.html', context=context_dict)
 
-def basket(request):
-    return render(request, 'mobile_store/basket.html')
-
+#takes to reviews page
 def reviews(request):
     return render(request, 'mobile_store/reviews.html')
 
-def iphoneXR(request):
-    return render(request, 'mobile_store/iphoneXR.html')
 
+#views for contacting the website, sends automated email back to client
 def contact_us(request):
     form = ContactForm        
     context_dict = {}
@@ -223,129 +218,21 @@ def contact_us(request):
         context_dict['surname'] = surname
         context_dict['email'] = email
         context_dict['feedback'] = feedback
-        
+        #after it emails customer who gave feedback, takes them to different page
         return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
     else:
         context =  {'form': form}
         return render(request, 'mobile_store/contact_us.html', context) 
             
-    
-
-
-
-def apple(request):
-    return render(request, 'mobile_store/apple.html')
-
-def android(request):
-    return render(request, 'mobile_store/android.html')
-
+#after user has given feedback, they are thanked for the feedback
 def contacting_us(request):
     firstname = request.POST.get('firstname')
-    context= {'firstname':firstname}
-    
+    context_dict = {
+        'firstname':firstname}
+    return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
-    return render(request, 'mobile_store/contacting_us.html', context)
-
-
-
-
-def show_category(request, category_name_slug):
-    context_dict = {}
-
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-        pages = Page.objects.filter(category=category)
-
-        context_dict['pages'] = pages
-        context_dict['category'] = category
-    except Category.DoesNotExist:
-        context_dict['category'] = None
-        context_dict['pages'] = None
-
-    
-    if request.method == 'POST':
-        query = request.POST['query'].strip()
-        if query:
-            context_dict['result_list'] = run_query(query)
-            context_dict['query'] = query
-
-    return render(request, 'mobile_store/category.html', context=context_dict)
-
-@login_required
-def add_category(request):
-    form = CategoryForm()
-
-    if request.method == 'POST':
-        form = CategoryForm(request.POST)
-
-        if form.is_valid():
-            form.save(commit=True)
-            return redirect('/mobile_store/')
-        else:
-            print(form.errors)
-    return render(request, 'mobile_store/add_category.html', {'form': form})
-
-@login_required
-def add_page(request, category_name_slug):
-    try:
-        category = Category.objects.get(slug=category_name_slug)
-    except Category.DoesNotExist:
-        category = None
-
-    if category is None:
-        return redirect('/mobile_store/')
-
-    form = PageForm()
-
-    if request.method == 'POST':
-        form = PageForm(request.POST)
-
-        if form.is_valid():
-            if category:
-                page = form.save(commit=False)
-                page.category = category
-                page.views = 0
-                page.save()
-
-                return redirect(reverse('mobile_store:show_category',
-                                        kwargs={'category_name_slug':category_name_slug}))
-        else:
-            print(form.errors)
-
-    context_dict = {'form': form, 'category': category}
-    return render(request, 'mobile_store/add_page.html', context=context_dict)
-        
-
-
-@login_required
-def restricted(request):
-    return render(request, 'mobile_store/restricted.html')
-   
-
-def get_server_side_cookie(request, cookie, default_val=None):
-    val = request.session.get(cookie)
-    if not val:
-        val = default_val
-    return val
-
-def visitor_cookie_handler(request):
-    visits = int(get_server_side_cookie(request, 'visits', '1'))
-
-    last_visit_cookie = get_server_side_cookie(request,
-                                               'last_visit',
-                                               str(datetime.now()))
-    last_visit_time = datetime.strptime(last_visit_cookie[:-7],
-                                        '%Y-%m-%d %H:%M:%S')
-
-    if (datetime.now() - last_visit_time).days > 0:
-        visits = visits + 1
-        request.session['last_visit'] = str(datetime.now())
-    else:
-        request.session['last_visit'] = last_visit_cookie
-        
-    request.session['visits'] = visits
-
+#was a bing search API implementation
 #def search(request):
 
     #result_list = []
@@ -354,7 +241,7 @@ def visitor_cookie_handler(request):
      #   if query:
      #       result_list = run_query(query)
 
-   # return render(request, 'rango/search.html', {'result_list': result_list})
+   # return render(request, 'mobile_store/search.html', {'result_list': result_list})
 
 
     

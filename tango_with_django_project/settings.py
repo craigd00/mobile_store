@@ -41,8 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mobile_store',
-    'registration',
-    'crispy_forms',
+    'registration',     #registration used for authentication
+    'crispy_forms',     #crispy_forms used to make forms look neater
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -122,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+#used for login implementation
 LOGIN_URL = 'mobile_store:login'
 
 # Internationalization

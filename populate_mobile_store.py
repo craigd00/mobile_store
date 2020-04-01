@@ -139,7 +139,7 @@ def populate():
         description='With Galaxy Note10 and Note10+ we have designed a mobile experience that is like a computer, a gaming console, a movie-tech camera, and an intelligent pen, all in one device. More screen, less interruption. Now comes in two sizes: powerful and powerful.For the first time ever, you can choose the Note size that fits you best. Impossibly thin design: High-polish metal and glass meld seamlessly - all in an impressively slim design. Cinematic Infinity-O Display. More power. More speed. More storage',
         image='samnote10.png')
 
-    
+#populates the items by passing in what they need to be created   
 def add_item(title, price, discount_price, category, label, slug, description, image):
     i = Item.objects.get_or_create(title=title, 
     price=price, discount_price=discount_price, category=category, 
