@@ -1,23 +1,15 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
-from mobile_store.models import Category
-from mobile_store.models import Page
-from mobile_store.forms import CategoryForm
-from mobile_store.forms import PageForm
-from mobile_store.forms import ContactForm
-from mobile_store.forms import UserForm, UserProfileForm
+from mobile_store.models import Category, Page, Item, Order, OrderItem
+from mobile_store.forms import CategoryForm, PageForm, ContactForm, UserForm, UserProfileForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
 from mobile_store.bing_search import run_query
 from django.core.mail import EmailMessage
-from django.shortcuts import redirect
 from django.template.loader import get_template
 from django.core.mail import send_mail
-from mobile_store.models import Item
-from mobile_store.models import Order
-from mobile_store.models import OrderItem
 from django.views.generic import ListView, DetailView, View
 from django.utils import timezone
 from django.contrib import messages
@@ -69,9 +61,7 @@ class OrderSummaryView(LoginRequiredMixin, View):
         except ObjectDoesNotExist:
             messages.error(self.request, "There is no active order")
             return redirect('/')
-        
-        
-    
+
 
 def product(request):
     context_dict = {
@@ -179,9 +169,10 @@ def checkout_page(request):
     
 
 def about(request):
-    context_dict = {'boldmessage': 'This tutorial has been put together by Craig'}
+    context_dict = {}
     visitor_cookie_handler(request)
     context_dict['visits'] = request.session['visits']
+
     return render(request, 'mobile_store/about.html', context=context_dict)
 
 def basket(request):
