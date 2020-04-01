@@ -2,14 +2,12 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from tango_with_django_project import settings
-
 from django.shortcuts import reverse
 
 # Create your models here.
 CATEGORY_CHOICES = (
     ('AP', 'Apple'),
     ('AN', 'Android')
-
 )
 
 LABEL_CHOICES = (
