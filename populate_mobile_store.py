@@ -8,7 +8,6 @@ from mobile_store.models import Category, Page
 from mobile_store.models import Item
 
 def populate():
-
     add_item(title='iPhone XR',
         price=559.99,
         discount_price=0,
@@ -146,6 +145,7 @@ def add_item(title, price, discount_price, category, label, slug, description, i
     price=price, discount_price=discount_price, category=category, 
     label=label, slug=slug, description=description, image=image)[0]
     return i
+
 
 if __name__ == '__main__':
     print('Starting Mobile Store population script...')

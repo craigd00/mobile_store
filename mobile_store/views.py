@@ -41,6 +41,21 @@ class HomeView(ListView):
         return render(request, 'mobile_store/index.html', context=context_dict)
 
 
+class AppleView(ListView):
+    model = Item
+    paginate_by = 4
+    template_name = 'mobile_store/apple.html'
+
+class AndroidView(ListView):
+    model = Item
+    paginate_by = 4
+    template_name = 'mobile_store/android.html'
+
+
+
+    
+    
+
 
 class OrderSummaryView(LoginRequiredMixin, View):
     def get(self, *args, **kwargs):

@@ -80,15 +80,16 @@ class Page(models.Model):
     #def __str__(self):
         #return self.phone_name
 
+
 class Item(models.Model):
     title = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2, default='AP')
     label = models.CharField(choices=LABEL_CHOICES, max_length=1, default='P')
+    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2, default='AP')
     slug = models.SlugField(default="product")
     description = models.TextField(default="Description unavailable for this product")
-    image = models.CharField(default="sale.jpg", max_length=400)
+    image = models.CharField(default="sale.jpg", max_length=400)   
    
     def get_static_url(self):
        return settings.STATIC_URL + 'images/' + self.image
