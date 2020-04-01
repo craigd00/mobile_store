@@ -1,7 +1,7 @@
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
-
+from tango_with_django_project import settings
 
 from django.shortcuts import reverse
 
@@ -88,7 +88,10 @@ class Item(models.Model):
     label = models.CharField(choices=LABEL_CHOICES, max_length=1, default='P')
     slug = models.SlugField(default="product")
     description = models.TextField(default="Description unavailable for this product")
+    image = models.CharField(default="sale.jpg", max_length=400)
    
+    def get_static_url(self):
+       return settings.STATIC_URL + 'images/' + self.image
 
     def __str__(self):
         return self.title
