@@ -15,6 +15,7 @@ from django.utils import timezone
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
+from django.core.paginator import Paginator
 
 #ListView used as showing objects on the html page
 class HomeView(ListView):
@@ -22,15 +23,31 @@ class HomeView(ListView):
     paginate_by = 8 #used to show how many phones to show on home page
     template_name = 'mobile_store/index.html'
 
-    def post(self, request):
-        context_dict = {}
+def homeView(request):
+    phones = Item.objects.all()
+    searchTerm = ''
 
-        if request.method == 'POST':
-            query = request.POST['query'].strip()
-            if query:
-                context_dict['result_list'] = list(Page.objects.filter(title=query))
+    if 'search' in request.GET:
+        searchTerm = request.GET['search']
+        phones = phones.filter(title__icontains=searchTerm)
 
-        return render(request, 'mobile_store/index.html', context=context_dict)
+    if 'type' in request.GET:
+        if request.GET.get('type') == "all":
+            phones = Item.objects.all()
+        else:
+            phones = Item.objects.filter(category=request.GET.get('type'))
+
+
+    paginator = Paginator(phones, 8)
+    page = request.GET.get('page')
+    phones = paginator.get_page(page)
+
+    get_copy = request.GET.copy()
+    params = get_copy.pop('page', True) and get_copy.urlencode()
+
+    context_dict = {'phones': phones, 'searchTerm':searchTerm, 'parameters': params}
+
+    return render(request, 'mobile_store/index.html', context=context_dict)
 
 
 class AppleView(ListView):
