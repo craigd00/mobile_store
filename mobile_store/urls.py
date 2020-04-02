@@ -6,7 +6,7 @@ app_name = 'mobile_store'
 
 urlpatterns = [
 
-    path('', views.HomeView.as_view(), name='index'),
+    path('', views.homeView, name='index'),
     path('about/', views.about, name='about'),
     path('apple/', views.AppleView.as_view(), name='apple'),
     path('android/', views.AndroidView.as_view(), name='android'),
