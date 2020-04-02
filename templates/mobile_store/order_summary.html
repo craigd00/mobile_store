@@ -43,7 +43,12 @@
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
             <td>{{ order_item.item.title }}</td>
-            <td>{{ order_item.item.price }}</td>
+            <td> {% if order_item.item.discount_price %}
+                    {{ order_item.item.discount_price }}
+                {% else %}
+                    {{ order_item.item.price}}
+                {% endif %}
+            </td>
             <td>
                 <a href="{% url 'mobile_store:remove_single_item_from_basket' order_item.item.slug %}"><i class="fas fa-minus mr-2"></i></a>
                     {{ order_item.quantity }}
