@@ -16,7 +16,7 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 
-
+#ListView used as showing objects on the html page
 class HomeView(ListView):
     model = Item
     paginate_by = 8 #used to show how many phones to show on home page
