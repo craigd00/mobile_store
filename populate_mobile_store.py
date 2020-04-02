@@ -4,6 +4,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 
 import django
 django.setup()
+
 from mobile_store.models import Item
 
 def populate():
