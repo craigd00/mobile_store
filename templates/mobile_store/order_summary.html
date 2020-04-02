@@ -14,12 +14,13 @@
 	<div class="container">
 		<h1 class ="jumbotron-heading"> 
 			{% if user.is_authenticated %}
-				Order Summary for: {{ user.username }}!
+				Here is your order: {{ user.username }}!
 			{% endif %}
 			
 	</div>
 </div>
 
+<!-- also uses a bootstrap template for ecommerce order summary -->
 <main>
     <div class="container">
 
@@ -37,7 +38,7 @@
         </thead>
         
         <tbody>
-
+        <!-- takes in items that are in order and gets details from them-->
         {% for order_item in object.items.all %}
         <tr>
             <th scope="row">{{ forloop.counter }}</th>
@@ -48,7 +49,7 @@
                     {{ order_item.quantity }}
                 <a href="{% url 'mobile_store:add_to_basket' order_item.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
             </td>
-            <td>
+            <td> <!--if it has a discount price it will display that,otherwise it will just display normal price-->
             {% if order_item.item.discount_price %}
                 £{{ order_item.get_total_discount_item_price }}
             {% else %}
@@ -72,7 +73,7 @@
         {% if object.get_total %}
         <tr>
             <td colspan="4"><b>Order Total</b></td>
-            <td><b>£{{ object.get_total }}</b></td>
+            <td><b>£{{ object.get_total }}</b></td> <!-- gets total order price-->
         </tr>
         <tr>
             <td colspan="5">
