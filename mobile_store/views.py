@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-from mobile_store.bing_search import run_query
+
 from django.core.mail import EmailMessage   
 from django.template.loader import get_template
 from django.core.mail import send_mail  #used to email customer
@@ -249,16 +249,7 @@ def contacting_us(request):
         'firstname':firstname}
     return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
-#was a bing search API implementation
-#def search(request):
 
-    #result_list = []
-  #  if request.method == 'POST':
-    #    query = request.POST['query'].strip()
-     #   if query:
-     #       result_list = run_query(query)
-
-   # return render(request, 'mobile_store/search.html', {'result_list': result_list})
 
 
     
