@@ -25,6 +25,7 @@
 		</p>
 
 		<p>
+			If you would rather visit our store in person, you can find ouy location below!.
 			We hope you enjoy our products as much as we enjoy offering them to you.
 			If you have any questions or comments, please don't hesitate to contact us.
 		</p>
@@ -32,10 +33,42 @@
 		<p>
 			Mobile Store Team.
 		</p>
-		<p class="aligncenter">
-			<img src="{% static 'images/mobilestore.png' %}" alt="Logo for shop" />
-		</p>
+
 			
 </div>
+<div class = "container">
 
+<div id="myMap" style='position:relative;width:600px;height:400px;'>
+
+</div>
+</div>
+<script type='text/javascript' src='http://www.bing.com/api/maps/mapcontrol?callback=GetMap' async defer></script>
+<script type="text/javascript">
+    function GetMap() {
+        var map = new Microsoft.Maps.Map('#myMap', {
+            credentials: 'ApwTBeJ0z9fTI18loKkk63JkdqPolLRoHNSma3faAu5r3xXAFOiA68Jyzn_tqj7c',
+            center: new Microsoft.Maps.Location(55.872158, -4.287869)
+        });
+
+        var center = map.getCenter();
+
+        //Create custom Pushpin
+        var pin1 = new Microsoft.Maps.Pushpin(center, {
+           // title: 'Mobile Store',
+            //subTitle: 'Shop Location',
+	
+			icon: "{% static 'images/mobilestore.png' %}"
+		});
+		
+		var pin2 = new Microsoft.Maps.Pushpin(center, {
+            title: 'Mobile Store',
+			subTitle: 'Shop Location',
+			color: 'green'
+        });
+
+        //Add the pushpin to the map
+		map.entities.push(pin1);
+		map.entities.push(pin2);
+    }
+</script>
 {% endblock %}
