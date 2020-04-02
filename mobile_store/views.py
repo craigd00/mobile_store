@@ -17,6 +17,11 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.core.paginator import Paginator
 
+#ListView used as showing objects on the html page
+class HomeView(ListView):
+    model = Item
+    paginate_by = 8 #used to show how many phones to show on home page
+    template_name = 'mobile_store/index.html'
 
 def homeView(request):
     phones = Item.objects.all()
