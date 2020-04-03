@@ -1,42 +1,140 @@
 {% extends 'mobile_store/base.html' %}
+{% load crispy_forms_tags %}
 
-{% block title_block %}
+{% block title_block %} 
     Reviews
 {% endblock %}
 
 {% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>
-{% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>{% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>{% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>{% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>{% block body_block %}
-<div class="jumbotron p-4">
-	<div class="container">
-        <h1 class ="jumbotron-heading">Reviews</h1>
-    </div>
-</div>
+  <center>
+  <!--Main layout-->
+
+  <center>
+    <div class="container wow fadeIn">
+
+      <!-- Heading -->
+      <h1 class="my-5 h2 text-center">Add a review</h1>
+
+      <!--Grid row-->
+      <div class="row">
+
+        <!--Grid column-->
+        <div class="col-md-10 mb-10">
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card content-->
+            <form class="card-body">
+
+              <!--Grid row-->
+              <div class="row">
+
+                <!--Grid column-->
+                <div class="col-md-5 mb-3">
+
+                  <!--firstName-->
+                  <div class="md-form ">
+                    <input type="text" id="firstName" class="form-control">
+                    <label for="firstName" class="">First name</label>
+                  </div>
+
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-md-5 mb-3">
+
+                  <!--lastName-->
+                  <div class="md-form">
+                    <input type="text" id="lastName" class="form-control">
+                    <label for="lastName" class="">Last name</label>
+                  </div>
+
+                </div>
+                <!--Grid column-->
+
+              </div>
+
+              <!--detailed_review-->
+              <div class="md-form mb-100">
+                <input type="text" id="detailed_review" class="form-control" placeholder="Please tell us about your experince with the phone">
+                <label for="detailed_review" class="">Detailed review</label>
+              </div>
+
+              <!--Grid row-->
+              <div class="row">
+
+                <!--Grid column-->
+                <div class="col-lg-5 col-md-12 mb-4">
+
+                  <label for="Model">Model</label>
+                  <select class="custom-select d-block w-100" id="Model" required>
+                    <option value="">Choose...</option>
+                    <option>Iphone 11</option><option>Iphone XR<option>Iphone 8<option>Iphone X<option>Iphone 7<option>Samsung Galaxy S8<option>Samsung Galaxy S9
+					<option>Samsung Note 10<option>Huawei P20<option>Huawei 20<option>Google Pixel<option>Sony Xperia T3<option>Lg Stylo 2</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    Please select a valid phone.
+                  </div>
+
+                </div>
+                <!--Grid column-->
+
+                <!--Grid column-->
+                <div class="col-lg-5 col-md-10 mb-10">
+
+                  <label for="rating">Rating</label>
+				  <select class="custom-select d-block w-100" id="rating" required>
+                    <option value="">Choose...</option>
+                    <option>1</option><option>2<option>3<option>4<option>5<option>6<option>7
+					<option>8<option>9<option>10</option>
+                  </select>
+                  <div class="invalid-feedback">
+                    rating between 1-10 required.
+                  </div>
+
+                </div>
+                <!--Grid column-->
+
+              </div>
+              <!--Grid row-->
+			  <div class="col-middle col-md-middle mb-middle">
+
+                  <label for="recommend">Would you Recommend this phone</label>           
+ 
+                <div class="custom-control custom-radio">
+                  <input id="credit" name="paymentMethod" type="radio" class="custom-control-input" checked required>
+                  <label class="custom-control-label" for="credit">I would</label>
+                </div>
+
+                <div class="custom-control custom-radio">
+                  <input id="debit" name="paymentMethod" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="debit">I would not</label>
+                </div>
+                
+              </div>
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+
+            </form>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
 
 
+      </div>
+      <!--Grid row-->
+
+    </div>
+  </main>
+
+  <!--Main layout-->
+  </center>
 
 {% endblock %}
+
+
