@@ -4,7 +4,7 @@ from django.test import TestCase
 import os
 import mobile_store.models
 from django.db import models
-from mobile_store.models import Contact, Item, OrderItem, Order
+from mobile_store.models import Contact, Item, OrderItem, Order, Review
 from tango_with_django_project import settings
 from django.urls import reverse, resolve
 from django.contrib.auth.models import User
@@ -99,6 +99,9 @@ class ModelsTest(TestCase):
     def test_order_item_model(self):
         self.assertTrue('OrderItem' in dir(mobile_store.models))
 
+    def test_review_model(self):
+        self.assertTrue('Review' in dir(mobile_store.models))
+
 
 class FormTests(TestCase):
     #checks that forms exist and so does fields in them 
@@ -139,7 +142,26 @@ class FormTests(TestCase):
             self.assertTrue(name in fields.keys())
             self.assertEqual(expected_field, type(fields[name]))
 
-class RegistrationTesting(TestCase):
+    def test_contact_form_in_forms(self):
+
+        self.assertTrue('ContactForm' in dir(forms))
+    
+    def test_review_form_fields(self):
+        review_form = forms.ReviewForm()
+        self.assertEqual(type(review_form.__dict__['instance']), Review)
+        fields = review_form.fields
+        expected_fields = {
+            'name': django_fields.CharField,
+            'phone': django_fields.CharField,
+            'review': django_fields.CharField,
+            'rating': django_fields.IntegerField,
+        }
+        for name in expected_fields:
+            expected_field = expected_fields[name]
+            self.assertTrue(name in fields.keys())
+            self.assertEqual(expected_field, type(fields[name]))
+
+class ViewTesting(TestCase):
     #checks that views exist to these pages
     def test_index_view_exists(self):
         url = ''
@@ -212,6 +234,16 @@ class RegistrationTesting(TestCase):
         
         self.assertEqual(url, '/mobile_store/reviews/')
 
+    def test_viewreviews_view_exists(self):
+        url = ''
+        try:
+            url = reverse('mobile_store:viewreviews')
+
+        except:
+            pass
+        
+        self.assertEqual(url, '/mobile_store/viewreviews/')
+
     
     def test_checkout_view_exists(self):
         url = ''
@@ -282,6 +314,8 @@ class TemplateTests(TestCase):
         template_path = os.path.join(template_base_path, 'product.html')
         self.assertTrue(os.path.exists(template_path))
         template_path = os.path.join(template_base_path, 'reviews.html')
+        self.assertTrue(os.path.exists(template_path))
+        template_path = os.path.join(template_base_path, 'viewreviews.html')
         self.assertTrue(os.path.exists(template_path))
 
     #checks index title

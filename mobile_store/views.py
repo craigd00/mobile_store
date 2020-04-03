@@ -250,7 +250,7 @@ def contacting_us(request):
         'firstname':firstname}
     return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
-
+@login_required
 def reviews(request):
     form = ReviewForm        
     context_dict = {}
@@ -283,7 +283,7 @@ def reviews(request):
         return render(request, 'mobile_store/reviews.html', context=context_dict) 
 
 
-
+@login_required
 def viewreviews(request):
     context_dict = {}
 
