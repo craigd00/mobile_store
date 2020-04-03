@@ -29,7 +29,7 @@ def homeView(request):
 
     if 'search' in request.GET:
         searchTerm = request.GET['search']
-        phones = phones.filter(title__icontains=searchTerm)
+        phones = phones.filter(phone_name__icontains=searchTerm)
 
     if 'type' in request.GET:
         if request.GET.get('type') == "all":
