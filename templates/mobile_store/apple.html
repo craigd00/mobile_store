@@ -25,15 +25,15 @@
 
         <div class="row wow fadeIn">
 
-            {% for item in item_list %}
+            {% for phone in item_list %}
             <div class="col-lg-3 col-md-6 mb-4">
            
                 <div class="card">
             
                 <div class="view overlay">
-                <img src="{{ item.get_static_url }}" class="card-img-top"
+                <img src="{{ phone.get_static_url }}" class="card-img-top"
                   alt="Picture of the current phone" height=250 width=auto>
-                <a href="{{ item.get_absolute_url }}">
+                <a href="{{ phone.get_absolute_url }}">
                   <div class="mask rgba-white-slight"></div>
                 </a>
                 </div>
@@ -42,22 +42,22 @@
                 <div class="card-body text-center">
             
                     <a href="" class="grey-text">
-                    <h5>{{ item.get_category_display }}</h5>
+                    <h5>{{ phone.get_brand_display }}</h5>
                     </a>
                     <h5>
                         <strong>
-                            <a href="" class="dark-grey-text">{{ item.title }}
-                            <span class="badge badge-pill {{ item.get_label_display }}-color">NEW</span>
+                            <a href="" class="dark-grey-text">{{ phone.phone_name }}
+                            <span class="badge badge-pill {{ phone.get_label_display }}-color">BUY</span>
                             </a>
                         </strong>
                     </h5>
 
                     <h4 class="font-weight-bold green-text">
                         <strong>£
-                        {% if item.discount_price %}
-                            {{ item.discount_price }}
+                        {% if phone.discount_price %}
+                            {{ phone.discount_price }}
                         {% else %}
-                            {{ item.price }}
+                            {{ phone.price }}
                         {% endif %}
                         </strong>
                     </h4>

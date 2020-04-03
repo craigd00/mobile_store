@@ -16,59 +16,59 @@ class ItemTestsNames(TestCase):
     #tests items are what they say they are
     def test_for_price_equal(self):
 
-        item = Item(title='test', price = 200, discount_price=0,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=0,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.price == 200), True)
+        self.assertEqual((phone.price == 200), True)
 
     def test_for_discount_is_zero(self):
 
-        item = Item(title='test', price = 200, discount_price=0,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=0,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.discount_price == 0), True)
+        self.assertEqual((phone.discount_price == 0), True)
 
     def test_for_discount_is_greater_zero(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.discount_price > 0), True)
+        self.assertEqual((phone.discount_price > 0), True)
 
-    def test_for_title_correct(self):
+    def test_for_phone_name_correct(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.title == "test"), True)
+        self.assertEqual((phone.phone_name == "test"), True)
 
-    def test_for_category_correct(self):
+    def test_for_brand_correct(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.category != "Apple"), False)
+        self.assertEqual((phone.brand != "Apple"), False)
 
     def test_for_slug_correct(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.slug == "testproduct"), True)
+        self.assertEqual((phone.slug == "testproduct"), True)
 
     def test_for_description_correct(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.description == "great product"), True)
+        self.assertEqual((phone.description == "great product"), True)
 
     def test_for_image_correct(self):
 
-        item = Item(title='test', price = 200, discount_price=50,
-        label='primary', category='Apple', slug='testproduct', 
+        phone = Item(phone_name='test', price = 200, discount_price=50,
+        label='primary', brand='Apple', slug='testproduct', 
         description='great product', image='mobile_store.png')
-        self.assertEqual((item.image == "mobile_store.png"), True)
+        self.assertEqual((phone.image == "mobile_store.png"), True)
 
  
 

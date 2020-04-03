@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
-from mobile_store.models import Item, Order, OrderItem, Review
+from mobile_store.models import Item, Order, OrderItem, Review, BillingAddress
 from mobile_store.forms import ContactForm, UserForm, ReviewForm, CheckoutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -35,7 +35,7 @@ def homeView(request):
         if request.GET.get('type') == "all":
             phones = Item.objects.all()
         else:
-            phones = Item.objects.filter(category=request.GET.get('type'))
+            phones = Item.objects.filter(brand=request.GET.get('type'))
 
 
     paginator = Paginator(phones, 8)
@@ -59,7 +59,7 @@ class AppleView(ListView):
     def get(self, request):
         context_dict = {}
         cat = "Apple"
-        context_dict['item_list'] = Item.objects.filter(category=cat)
+        context_dict['item_list'] = Item.objects.filter(brand=cat)
         
 
         return render(request, 'mobile_store/apple.html', context=context_dict)
@@ -74,7 +74,7 @@ class AndroidView(ListView):
     def get(self, request):
         context_dict = {}
         cat = "Android"
-        context_dict['item_list'] = Item.objects.filter(category=cat)
+        context_dict['item_list'] = Item.objects.filter(brand=cat)
 
         return render(request, 'mobile_store/android.html',context=context_dict)
 
@@ -93,12 +93,6 @@ class OrderSummaryView(LoginRequiredMixin, View):
             return redirect('/')
 
 
-#def product(request):
-   # context_dict = {
-      #  'items': Item.objects.all()
-   # }
-   # return render(request, 'mobile_store/product.html', context=context_dict)
-
 #used for showing products
 class ItemDetailView(DetailView):
     model = Item
@@ -107,14 +101,14 @@ class ItemDetailView(DetailView):
 #adds a phone to the basket
 @login_required
 def add_to_basket(request, slug):
-    item = get_object_or_404(Item, slug=slug)
-    order_item,created = OrderItem.objects.get_or_create(item=item
+    phone = get_object_or_404(Item, slug=slug)
+    order_item,created = OrderItem.objects.get_or_create(phone=phone
     , user=request.user, ordered=False)
     order_qs = Order.objects.filter(user=request.user, ordered=False)
     if order_qs.exists():
         order = order_qs[0]
         #check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(phone__slug=phone.slug).exists():
             order_item.quantity += 1
             order_item.save()
             messages.info(request, "Quantity of this item has been added")
@@ -135,16 +129,16 @@ def add_to_basket(request, slug):
 #removes whole item from basket,even if quantity > 1, gives user alerts
 @login_required
 def remove_from_basket(request, slug):
-    item = get_object_or_404(Item, slug=slug)
+    phone = get_object_or_404(Item, slug=slug)
     order_qs = Order.objects.filter(
         user=request.user, ordered=False
     )
     if order_qs.exists():
         order = order_qs[0]
         #check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(phone__slug=phone.slug).exists():
             order_item = OrderItem.objects.filter(
-                item=item,
+                phone=phone,
                 user=request.user,
                 ordered=False
             )[0]
@@ -164,16 +158,16 @@ def remove_from_basket(request, slug):
 #removes one items quantity from the basket
 @login_required
 def remove_single_item_from_basket(request, slug):
-    item = get_object_or_404(Item, slug=slug)
+    phone = get_object_or_404(Item, slug=slug)
     order_qs = Order.objects.filter(
         user=request.user, ordered=False
     )
     if order_qs.exists():
         order = order_qs[0]
         #check if the order item is in the order
-        if order.items.filter(item__slug=item.slug).exists():
+        if order.items.filter(phone__slug=phone.slug).exists():
             order_item = OrderItem.objects.filter(
-                item=item,
+                phone=phone,
                 user=request.user,
                 ordered=False
             )[0]
@@ -208,14 +202,9 @@ class CheckoutView(View):
     
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
+        
         order = Order.objects.get(user=self.request.user, ordered=False)
-        messages.warning(self.request, "Checkout Failed")          
-        return redirect('mobile_store:checkout_page')
-            
-            
-        if ObjectDoesNotExist:
-            messages.error(self.request, "There is no active order")
-            return redirect('mobile_store:order_summary')
+        
         
         if form.is_valid():
                 
@@ -232,11 +221,17 @@ class CheckoutView(View):
                 order.billing_address = billing_address
                 order.save()
                 print ("Valid")
-                return redirect('mobile_store:checkout_page')
-    
+            
+                return redirect('mobile_store:checkout_complete')
+        else:
+            messages.warning(self.request, "Checkout Failed")          
+            return redirect('mobile_store:checkout_page')
 
 def about(request):
     return render(request, 'mobile_store/about.html')
+
+def checkout_complete(request):
+    return render(request, 'mobile_store/checkout_complete.html')
 
 
 

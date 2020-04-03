@@ -46,11 +46,11 @@ class Review(models.Model):
 
 #model for items 
 class Item(models.Model):
-    title = models.CharField(max_length=100)
+    phone_name = models.CharField(max_length=100)
     price = models.FloatField()
     discount_price = models.FloatField(blank=True, null=True)
     label = models.CharField(choices=LABEL_CHOICES, max_length=1, default='P')
-    category = models.CharField(choices=CATEGORY_CHOICES, max_length=2, default='AP')
+    brand = models.CharField(choices=CATEGORY_CHOICES, max_length=2, default='AP')
     slug = models.SlugField(default="product")
     description = models.TextField(default="Description unavailable for this product")
     image = models.CharField(default="sale.jpg", max_length=400)   
@@ -60,7 +60,7 @@ class Item(models.Model):
        return settings.STATIC_URL + 'images/' + self.image
 
     def __str__(self):
-        return self.title
+        return self.phone_name
 
     #gets absolute url of item
     def get_absolute_url(self):
@@ -85,24 +85,24 @@ class Item(models.Model):
 class OrderItem(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     ordered = models.BooleanField(default=False)
-    item = models.ForeignKey(Item, on_delete = models.CASCADE)
+    phone = models.ForeignKey(Item, on_delete = models.CASCADE)
     quantity = models.IntegerField(default=1)
     def __str__(self):
-        return f"{self.quantity} of {self.item.title}"
+        return f"{self.quantity} of {self.phone.phone_name}"
 
     #gets price of item multiplied by quantity
-    def get_total_item_price(self):
-        return self.quantity * self.item.price
+    def get_total_phone_price(self):
+        return self.quantity * self.phone.price
 
     #gets discount price of item if it has one
-    def get_total_discount_item_price(self):
-        return self.quantity * self.item.discount_price
+    def get_total_discount_phone_price(self):
+        return self.quantity * self.phone.discount_price
 
     #if item has a discount price it uses that, otherwise it returns the normal price
     def get_final_price(self):
-        if self.item.discount_price:
-            return self.get_total_discount_item_price()
-        return self.get_total_item_price()
+        if self.phone.discount_price:
+            return self.get_total_discount_phone_price()
+        return self.get_total_phone_price()
 
 
 #model for an order from a user, can add many items to order
@@ -135,18 +135,6 @@ class BillingAddress(models.Model):
     def __str__(self):
         return self.user.username
 
-class Review(models.Model):
-    PHONE_MAX_LENGTH = 100
-    REVIEW_MAX_LENGTH = 300
-    NAME_MAX_LENGTH = 128
-
-    name = models.CharField(max_length=NAME_MAX_LENGTH, default="user")
-    phone = models.CharField(max_length=PHONE_MAX_LENGTH)
-    review = models.CharField(max_length=REVIEW_MAX_LENGTH, blank=True)
-    rating = models.IntegerField(default=0)
-    def save(self, *args, **kwargs):
-       
-        super(Review, self).save(*args, **kwargs)
         
 
 
