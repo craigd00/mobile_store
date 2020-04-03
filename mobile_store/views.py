@@ -1,13 +1,15 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
-from mobile_store.models import Item, Order, OrderItem, Review
-from mobile_store.forms import ContactForm, UserForm, ReviewForm
+from mobile_store.models import Item, Order, OrderItem
+from mobile_store.forms import ContactForm, UserForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from datetime import datetime
-
-from django.core.mail import EmailMessage   
+from django.views.generic import ListView, DetailView, View
+import stripe
+from django.views.generic.base import TemplateView
+from django.core.mail import EmailMessage    
 from django.template.loader import get_template
 from django.core.mail import send_mail  #used to email customer
 from django.views.generic import ListView, DetailView, View
@@ -16,9 +18,15 @@ from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.core.paginator import Paginator
+from django import forms
+from mobile_store.forms import CheckoutForm
+from .models import BillingAddress  
+from django.conf import settings
+
+
 
 #ListView used as showing objects on the html page
-class HomeView(ListView):
+class HomeView(ListView):  
     model = Item
     paginate_by = 8 #used to show how many phones to show on home page
     template_name = 'mobile_store/index.html'
@@ -197,13 +205,56 @@ def remove_single_item_from_basket(request, slug):
 
 
 #takes to checkout page
-def checkout_page(request):
-    return render(request, 'mobile_store/checkout_page.html')
-    
 
+class CheckoutView(View):
+    
+    def get(self, *args, **kwargs):
+        
+        form = CheckoutForm()
+        context = {
+            'form': form 
+            }
+    
+        return render(self.request, 'mobile_store/checkout_page.html', context)
+    
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        try:
+            order = Order.objects.get(user=self.request.user, ordered=False)
+            if form.is_valid():
+                
+                street_address = form.cleaned_data.get('street_address')
+                apartment_address = form.cleaned_data.get('apartment_address')
+                country = form.cleaned_data.get('country')
+                zip = form.cleaned_data.get('zip')
+                same_billing_address = form.cleaned_data.get('same_billing_address')
+                save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+                billing_address = BillingAddress(user=self.request.user, street_address=street_address, apartment_address = apartment_address, 
+                country=country, zip=zip)
+                billing_address.save()
+                order.billing_address = billing_address
+                order.save()
+                print ("Valid")
+                return redirect('mobile_store:checkout_page')
+       
+            messages.warning(self.request, "Checkout Failed")           
+            return redirect('mobile_store:checkout_page')
+            
+            
+        except ObjectDoesNotExist:
+            messages.error(self.request, "There is no active order")
+            return redirect('mobile_store:order_summary')
+        
+        
+    
 def about(request):
     return render(request, 'mobile_store/about.html')
 
+
+#takes to reviews page
+def reviews(request):
+    return render(request, 'mobile_store/reviews.html')
 
 
 #views for contacting the website, sends automated email back to client
@@ -220,12 +271,7 @@ def contact_us(request):
         email = request.POST.get('email')
         feedback = request.POST.get('feedback')
 
-        contact = form.save(commit=False)
-        contact.firstname = firstname
-        contact.surname = surname
-        contact.email = email
-        contact.feedback = feedback
-        contact.save()
+       
 
         subject = "comment"
         comment= firstname + " with the email, " + email + ", sent the following message:\n\n" + feedback + ". We will get back to your message in due course.\n\n" + "Best wishes from the Mobile Store Team";
@@ -251,47 +297,6 @@ def contacting_us(request):
     return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
 
-def reviews(request):
-    form = ReviewForm        
-    context_dict = {}
 
 
-    form= ReviewForm(request.POST or None)
-    if form.is_valid():
-        name = request.POST.get('name')
-        phone = request.POST.get('phone')
-        review = request.POST.get('review')
-        rating = request.POST.get('rating')
-
-        post = form.save(commit=False)
-        post.name = name
-        post.phone = phone
-        post.review = review
-        post.rating = rating
-        post.save()
-        context_dict['name'] = name
-        context_dict['phone'] = phone
-        context_dict['review'] = review
-        context_dict['rating'] = rating
-
-        return render(request, 'mobile_store/reviews.html')
-
-    else:
-        context_dict={
-            'form':form
-        }
-        return render(request, 'mobile_store/reviews.html', context=context_dict) 
-
-
-
-def viewreviews(request):
-    context_dict = {}
-
-    try:
-        reviews = Review.objects.all()
-        context_dict['reviews'] = reviews
-    except Review.DoesNotExist:
-        context_dict['reviews'] = None
-
-    return render(request, 'mobile_store/viewreviews.html', context=context_dict)
     
