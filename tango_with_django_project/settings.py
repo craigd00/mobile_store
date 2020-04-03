@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'mobile_store',
     'registration',     #registration used for authentication
     'crispy_forms',     #crispy_forms used to make forms look neater
+    'django_countries',
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'

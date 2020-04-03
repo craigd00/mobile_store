@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
 from mobile_store.models import Item, Order, OrderItem, Review
-from mobile_store.forms import ContactForm, UserForm, ReviewForm
+from mobile_store.forms import ContactForm, UserForm, ReviewForm, CheckoutForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -195,10 +195,44 @@ def remove_single_item_from_basket(request, slug):
         messages.info(request, "No current order")
         return redirect('mobile_store:product', slug=slug)
 
-
-#takes to checkout page
-def checkout_page(request):
-    return render(request, 'mobile_store/checkout_page.html')
+class CheckoutView(View):
+    
+    def get(self, *args, **kwargs):
+        
+        form = CheckoutForm()
+        context = {
+            'form': form 
+            }
+    
+        return render(self.request, 'mobile_store/checkout_page.html', context)
+    
+    def post(self, *args, **kwargs):
+        form = CheckoutForm(self.request.POST or None)
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        messages.warning(self.request, "Checkout Failed")          
+        return redirect('mobile_store:checkout_page')
+            
+            
+        if ObjectDoesNotExist:
+            messages.error(self.request, "There is no active order")
+            return redirect('mobile_store:order_summary')
+        
+        if form.is_valid():
+                
+                street_address = form.cleaned_data.get('street_address')
+                apartment_address = form.cleaned_data.get('apartment_address')
+                country = form.cleaned_data.get('country')
+                zip = form.cleaned_data.get('zip')
+                same_billing_address = form.cleaned_data.get('same_billing_address')
+                save_info = form.cleaned_data.get('save_info')
+                payment_option = form.cleaned_data.get('payment_option')
+                billing_address = BillingAddress(user=self.request.user, street_address=street_address, apartment_address = apartment_address, 
+                country=country, zip=zip)
+                billing_address.save()
+                order.billing_address = billing_address
+                order.save()
+                print ("Valid")
+                return redirect('mobile_store:checkout_page')
     
 
 def about(request):

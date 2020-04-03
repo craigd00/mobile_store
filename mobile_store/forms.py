@@ -1,7 +1,10 @@
 from django import forms
-
+from django import views
 from django.contrib.auth.models import User
 from mobile_store.models import Contact, Review
+from django_countries.fields import CountryField
+from django_countries.widgets import CountrySelectWidget
+
 
 #form for the contact to submit their feedback using
 class ContactForm(forms.ModelForm):
@@ -22,6 +25,21 @@ class UserForm(forms.ModelForm):
         model = User
         fields = ('username', 'email', 'password',)
 
+
+#checkout page form for rediriecting to payment method
+PAYMENT_CHOICES = (
+    ('S', 'Stripe'),
+    ('P', 'PayPal')
+)
+class CheckoutForm(forms.Form):
+    street_address = forms.CharField()
+    apartment_address = forms.CharField(required=False)
+    country = CountryField(blank_label='(select country)').formfield(widget=CountrySelectWidget(attrs={'class':'custom-select d-block w-100'}))
+    zip = forms.CharField(widget=forms.TextInput(attrs={'class':'form-control'}))
+    same_shipping_address = forms.BooleanField(required=False)
+    save_info = forms.BooleanField(required=False)
+    payment_option = forms.ChoiceField(widget=forms.RadioSelect, choices=PAYMENT_CHOICES)
+
 class ReviewForm(forms.ModelForm):
  
     name = forms.CharField(max_length=Contact.NAME_MAX_LENGTH, label="Name")
@@ -32,7 +50,18 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('name', 'phone', 'review', 'rating',)
-
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 
 
 

@@ -142,9 +142,9 @@ class FormTests(TestCase):
             self.assertTrue(name in fields.keys())
             self.assertEqual(expected_field, type(fields[name]))
 
-    def test_contact_form_in_forms(self):
+    def test_review_form_in_forms(self):
 
-        self.assertTrue('ContactForm' in dir(forms))
+        self.assertTrue('ReviewForm' in dir(forms))
     
     def test_review_form_fields(self):
         review_form = forms.ReviewForm()
