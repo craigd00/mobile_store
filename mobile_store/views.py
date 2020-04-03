@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse, Http404
-from mobile_store.models import Item, Order, OrderItem
-from mobile_store.forms import ContactForm, UserForm
+from mobile_store.models import Item, Order, OrderItem, Review
+from mobile_store.forms import ContactForm, UserForm, ReviewForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -205,16 +205,6 @@ def about(request):
     return render(request, 'mobile_store/about.html')
 
 
-#takes to reviews page
-
-def reviews(request):
-
-
-    return render(request, 'mobile_store/reviews.html')
-
-def viewreviews(request):
-    return render(request, 'mobile_store/viewreviews.html')
-
 
 #views for contacting the website, sends automated email back to client
 def contact_us(request):
@@ -230,7 +220,12 @@ def contact_us(request):
         email = request.POST.get('email')
         feedback = request.POST.get('feedback')
 
-       
+        contact = form.save(commit=False)
+        contact.firstname = firstname
+        contact.surname = surname
+        contact.email = email
+        contact.feedback = feedback
+        contact.save()
 
         subject = "comment"
         comment= firstname + " with the email, " + email + ", sent the following message:\n\n" + feedback + ". We will get back to your message in due course.\n\n" + "Best wishes from the Mobile Store Team";
@@ -256,6 +251,47 @@ def contacting_us(request):
     return render(request, 'mobile_store/contacting_us.html', context=context_dict)
 
 
+def reviews(request):
+    form = ReviewForm        
+    context_dict = {}
 
 
+    form= ReviewForm(request.POST or None)
+    if form.is_valid():
+        name = request.POST.get('name')
+        phone = request.POST.get('phone')
+        review = request.POST.get('review')
+        rating = request.POST.get('rating')
+
+        post = form.save(commit=False)
+        post.name = name
+        post.phone = phone
+        post.review = review
+        post.rating = rating
+        post.save()
+        context_dict['name'] = name
+        context_dict['phone'] = phone
+        context_dict['review'] = review
+        context_dict['rating'] = rating
+
+        return render(request, 'mobile_store/reviews.html')
+
+    else:
+        context_dict={
+            'form':form
+        }
+        return render(request, 'mobile_store/reviews.html', context=context_dict) 
+
+
+
+def viewreviews(request):
+    context_dict = {}
+
+    try:
+        reviews = Review.objects.all()
+        context_dict['reviews'] = reviews
+    except Review.DoesNotExist:
+        context_dict['reviews'] = None
+
+    return render(request, 'mobile_store/viewreviews.html', context=context_dict)
     

@@ -5,7 +5,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE',
 import django
 django.setup()
 
-from mobile_store.models import Item
+from mobile_store.models import Item, Review
 
 def populate():
     add_item(title='iPhone XR',
@@ -139,12 +139,27 @@ def populate():
         description='With Galaxy Note10 and Note10+ we have designed a mobile experience that is like a computer, a gaming console, a movie-tech camera, and an intelligent pen, all in one device. More screen, less interruption. Now comes in two sizes: powerful and powerful.For the first time ever, you can choose the Note size that fits you best. Impossibly thin design: High-polish metal and glass meld seamlessly - all in an impressively slim design. Cinematic Infinity-O Display. More power. More speed. More storage',
         image='samnote10.png')
 
+    add_review(name = 'John',
+    phone='iPhone 8',
+    review='Reliable phone, could not ask for much more',
+    rating = 8)
+
+    add_review(name = 'John',
+    phone='Samsung Galaxy 8',
+    review='Low battery life, price was quite expensive for product',
+    rating = 3)
+
 #populates the items by passing in what they need to be created   
 def add_item(title, price, discount_price, category, label, slug, description, image):
     i = Item.objects.get_or_create(title=title, 
     price=price, discount_price=discount_price, category=category, 
     label=label, slug=slug, description=description, image=image)[0]
     return i
+
+def add_review(name, phone, review, rating):
+    r = Review.objects.get_or_create(name=name, 
+    phone=phone, review=review, rating=rating)[0]
+    return r
 
 
 if __name__ == '__main__':

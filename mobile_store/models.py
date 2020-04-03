@@ -25,6 +25,23 @@ class Contact(models.Model):
     surname = models.CharField(max_length=NAME_MAX_LENGTH)
     email = models.EmailField(blank=True)
     feedback = models.CharField(max_length=FEEDBACK_MAX_LENGTH, blank=True)
+    def save(self, *args, **kwargs):
+       
+        super(Contact, self).save(*args, **kwargs)
+
+class Review(models.Model):
+    PHONE_MAX_LENGTH = 100
+    REVIEW_MAX_LENGTH = 300
+    NAME_MAX_LENGTH = 128
+
+    name = models.CharField(max_length=NAME_MAX_LENGTH, default="user")
+    phone = models.CharField(max_length=PHONE_MAX_LENGTH)
+    review = models.CharField(max_length=REVIEW_MAX_LENGTH, blank=True)
+    rating = models.IntegerField(default=0)
+    def save(self, *args, **kwargs):
+       
+        super(Review, self).save(*args, **kwargs)
+    
 
 
 #model for items 

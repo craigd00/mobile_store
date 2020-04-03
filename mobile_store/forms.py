@@ -1,7 +1,7 @@
 from django import forms
 
 from django.contrib.auth.models import User
-from mobile_store.models import Contact
+from mobile_store.models import Contact, Review
 
 #form for the contact to submit their feedback using
 class ContactForm(forms.ModelForm):
@@ -21,6 +21,18 @@ class UserForm(forms.ModelForm):
     class Meta:
         model = User
         fields = ('username', 'email', 'password',)
+
+class ReviewForm(forms.ModelForm):
+ 
+    name = forms.CharField(max_length=Contact.NAME_MAX_LENGTH, label="Name")
+    phone = forms.CharField(max_length=Review.PHONE_MAX_LENGTH,label="Phone")
+    review = forms.CharField(label='', max_length=Review.REVIEW_MAX_LENGTH, widget=forms.Textarea(attrs={'placeholder': 'Enter your review here'}))
+    rating = forms.IntegerField(label="Rating")
+
+    class Meta:
+        model = Review
+        fields = ('name', 'phone', 'review', 'rating',)
+
 
 
 
