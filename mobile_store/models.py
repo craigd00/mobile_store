@@ -3,6 +3,8 @@ from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 from tango_with_django_project import settings
 from django.shortcuts import reverse
+from django_countries.fields import CountryField
+from django.db.models.signals import post_save
 
 # Create your models here.
 CATEGORY_CHOICES = (
@@ -25,23 +27,6 @@ class Contact(models.Model):
     surname = models.CharField(max_length=NAME_MAX_LENGTH)
     email = models.EmailField(blank=True)
     feedback = models.CharField(max_length=FEEDBACK_MAX_LENGTH, blank=True)
-    def save(self, *args, **kwargs):
-       
-        super(Contact, self).save(*args, **kwargs)
-
-class Review(models.Model):
-    PHONE_MAX_LENGTH = 100
-    REVIEW_MAX_LENGTH = 300
-    NAME_MAX_LENGTH = 128
-
-    name = models.CharField(max_length=NAME_MAX_LENGTH, default="user")
-    phone = models.CharField(max_length=PHONE_MAX_LENGTH)
-    review = models.CharField(max_length=REVIEW_MAX_LENGTH, blank=True)
-    rating = models.IntegerField(default=0)
-    def save(self, *args, **kwargs):
-       
-        super(Review, self).save(*args, **kwargs)
-    
 
 
 #model for items 
@@ -112,6 +97,7 @@ class Order(models.Model):
     start_date = models.DateTimeField(auto_now_add=True)
     ordered_date = models.DateTimeField() 
     items = models.ManyToManyField(OrderItem)
+    billing_address = models.ForeignKey('BillingAddress', on_delete=models.SET_NULL, blank=True, null=True)
 
     def __str__(self):
         return self.user.username
@@ -122,8 +108,24 @@ class Order(models.Model):
         for order_item in self.items.all():
             total += order_item.get_final_price()
         return total
+    
+# model for the billing address of the user including the country field
+class BillingAddress(models.Model):
+    user = models.ForeignKey(User, on_delete = models.CASCADE)
+    street_address = models.CharField(max_length=100)
+    apartment_address = models.CharField(max_length=100)
+    country = CountryField(multiple=False)
+    zip=models.CharField(max_length=20)
+    
+    def __str__(self):
+        return self.user.username
+        
 
 
+
+
+
+    
 
 
 
