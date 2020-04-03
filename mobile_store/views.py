@@ -206,8 +206,9 @@ def about(request):
 
 
 #takes to reviews page
-@login_required
+
 def reviews(request):
+
 
     return render(request, 'mobile_store/reviews.html')
 
