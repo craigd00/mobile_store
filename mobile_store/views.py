@@ -219,9 +219,16 @@ class CheckoutView(View):
     
     def post(self, *args, **kwargs):
         form = CheckoutForm(self.request.POST or None)
-        try:
-            order = Order.objects.get(user=self.request.user, ordered=False)
-            if form.is_valid():
+        order = Order.objects.get(user=self.request.user, ordered=False)
+        messages.warning(self.request, "Checkout Failed")          
+        return redirect('mobile_store:checkout_page')
+            
+            
+        except ObjectDoesNotExist:
+            messages.error(self.request, "There is no active order")
+            return redirect('mobile_store:order_summary')
+        
+        if form.is_valid():
                 
                 street_address = form.cleaned_data.get('street_address')
                 apartment_address = form.cleaned_data.get('apartment_address')
@@ -237,15 +244,6 @@ class CheckoutView(View):
                 order.save()
                 print ("Valid")
                 return redirect('mobile_store:checkout_page')
-       
-            messages.warning(self.request, "Checkout Failed")           
-            return redirect('mobile_store:checkout_page')
-            
-            
-        except ObjectDoesNotExist:
-            messages.error(self.request, "There is no active order")
-            return redirect('mobile_store:order_summary')
-        
         
     
 def about(request):
