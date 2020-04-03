@@ -212,7 +212,7 @@ def reviews(request):
     return render(request, 'mobile_store/reviews.html')
 
 def viewreviews(request):
-return render(request, 'mobile_store/viewreviews.html')
+    return render(request, 'mobile_store/viewreviews.html')
 
 
 #views for contacting the website, sends automated email back to client
