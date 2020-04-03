@@ -1,0 +1,38 @@
+{% extends 'mobile_store/base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %} 
+    Contact Us
+{% endblock %}
+
+{% block body_block %} 
+<div class="jumbotron p-4">
+	<div class="container">
+        <h1 class ="jumbotron-heading">View reviews</h1>
+        <h5 class="jumbotron-heading">View customers opinions on phones</h5>
+    </div>
+</div>
+<div class="container">
+
+{% if reviews %}
+
+    {% for review in reviews %}
+    <h1> Phone Reviewing: {{ review.phone }}</h1>
+    <h3>Review by: {{ review.name }}</h3>
+    
+    <h5>{{ review.review }}</h5>
+    <h6>Rating: {{ review.rating }}</h6>
+    <br/>
+    {% endfor %}
+</ul>
+
+{% else %}
+<strong>No reviews currently posted.</strong>
+{% endif %}
+
+{% if user.is_authenticated %}
+    <a href="{% url 'mobile_store:reviews' %}">Add Review</a> <br />
+{% endif %}
+</div>
+
+{% endblock %}

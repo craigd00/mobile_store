@@ -41,8 +41,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mobile_store',
-    'registration',
+    'registration',     #registration used for authentication
+    'crispy_forms',     #crispy_forms used to make forms look neater
 ]
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 #If true, users can register
 REGISTRATION_OPEN = True
@@ -119,7 +122,7 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
+#used for login implementation
 LOGIN_URL = 'mobile_store:login'
 
 # Internationalization
@@ -137,6 +140,12 @@ USE_TZ = True
 
 MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
+
+EMAIL_HOST= 'smtp.gmail.com'
+EMAIL_HOST_USER= 'mobilestoregu@gmail.com'
+EMAIL_HOST_PASSWORD= 'GlasgowUni20'
+EMAIL_USE_TLS= True
+EMAIL_PORT= 587
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

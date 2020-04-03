@@ -21,7 +21,8 @@ from django.urls import include
 from mobile_store import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    #path('', views.index, name='index'),
+    path('', views.homeView, name='index'),
     path('mobile_store/', include('mobile_store.urls')),
     path('admin/', admin.site.urls),
     path('accounts/', include('registration.backends.simple.urls')),
