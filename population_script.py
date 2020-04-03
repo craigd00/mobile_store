@@ -154,7 +154,7 @@ def add_phone(phone_name, price, discount_price, brand, label, slug, description
     p = Item.objects.get_or_create(phone_name=phone_name, 
     price=price, discount_price=discount_price, brand=brand, 
     label=label, slug=slug, description=description, image=image)[0]
-    return i
+    return p
 
 def add_review(name, phone, review, rating):
     r = Review.objects.get_or_create(name=name, 
